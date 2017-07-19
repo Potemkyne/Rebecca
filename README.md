@@ -1,10 +1,5 @@
 <h3>Installation de EasyAdminBundle</h3>
-<ul>
-<li>require javiereguiluz/easyadmin-bundle</li>
-<li>maj du noyau</li>
-<li>chargement des routes</li>
-<li>web assets</li>
-</ul>
+
 <h3>Génération des entités</h3>
 <ul>
 <li>Movie</li>
@@ -18,13 +13,12 @@
 
 <h3>Utilisation du VichUploaderBundle pour l'upload d'image</h3>
 
-<h3>Génération de la base de données</h3>
+<h3>Génération bdd</h3>
 
 <h3>Configuration de EasyAdminBundle</h3>
 <h4>Pour chaque entité</h4>
 <ul>
 <li>design</li>
-<li>entities</li>
 <li>list</li>
 <li>show</li>
 <li>new</li>
