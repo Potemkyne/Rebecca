@@ -1,0 +1,294 @@
+easy_admin:
+    site_name: 'REBECCA'   
+    #disabled_actions: ['delete', 'edit', 'new']    
+    design:
+        templates:
+            #layout: 'BackBundle:default:index.html.twig'
+            #new: 'BackBundle:default:index.html.twig'
+        form_theme: 
+            - horizontal
+            - VichUploaderBundle:Form:fields.html.twig
+        menu:  
+            - { label: 'Home',  icon: 'home',route: 'back_homepage' }
+            - { entity: 'Movie',icon: 'film',default:'true'}
+           #- { label: 'Movie', children:['Company'] }
+            - { entity: 'Cast',icon: 'user',default:'true'}
+            - { entity: 'Gallery',icon: 'camera',default:'true'}
+            - { entity: 'Award',icon: 'star',default:'true'}
+            - { entity: 'Company', label: 'Production Company' , icon: 'globe', params:{action:'list'}}
+        brand_color: '#4682B4'
+        color_scheme: 'dark'
+        assets:
+            css:
+                - 'CSS/mstyles.css'
+                # HTTP protocol-relative URL
+                - '//example.org/css/admin1.css'
+                # absolute non-secure URL
+                - 'http://example.org/css/admin2.css'
+                # absolute secure URL
+                - 'https://example.org/css/admin3.css'
+                # absolute internal bundle URL
+                - '/bundles/user/css/admin4.css'
+                # relative internal bundle URL
+            js:
+                # this option works exactly the same as the 'css' option
+                - '//example.org/js/admin1.js'
+                - 'http://example.org/js/admin2.js'
+                - 'https://example.org/js/admin3.js'
+                - '/bundles/user/js/admin4.js'
+                - 'bundles/app/js/admin5.js'
+            favicon: 'ASSETS/backend/hitch.ico'
+    show:
+        max_results: 20
+    list:
+        actions:
+            - { name: 'show', icon: 'search', label: false }
+            - { name: 'edit', icon: 'wrench' ,label: false}
+            - { name: 'delete', icon: 'trash' ,label: false}
+    formats:
+        date:     'd/m/Y'
+        time:     'H:i'
+        datetime: 'd/m/Y H:i:s'
+   
+    entities:
+        Movie:
+            class:  BackBundle\Entity\Movie
+            help: null
+            label: 'Movies'
+            list:
+                title: "Movie List"
+                help: null
+                max_results: 30
+                fields:  
+                   - id
+                   - enTitle
+                   - frTitle
+                   - plot
+                   - screenplay
+                   - { property: 'music', label: 'score' }
+                   - { property: 'releaseDate' }
+                   - { property: 'runningTime' }
+                   - { property: 'country' }
+                   - { property: 'language' }
+                   #- { property: 'companies' }
+                   #- { property: 'casts'}
+                dql_filter: 'entity.id >= 1 '
+                sort: 'id'
+                #actions: ['-search']
+            show:
+                title: 'Show Movie'
+                max_results: 20
+                fields:  
+                   - id
+                   - enTitle
+                   - frTitle
+                   - plot
+                   - screenplay
+                   - { property: 'music', label: 'score' }
+                   - { property: 'releaseDate' }
+                   - { property: 'runningTime' }
+                   - { property: 'country' }
+                   - { property: 'language' }
+                   - { property: 'companies' }
+                   #- { property: 'casts' }
+            search:
+                title: 'Search Movie'
+                sort: ['id', 'desc']
+                help: null
+            #templates:
+                #paginator: ''
+            new:
+                title: 'Add Movie'
+                form_options: { validation_groups: ['Default', 'Movie'] }
+                fields:  
+                   - enTitle
+                   - frTitle
+                   - plot
+                   - screenplay
+                   - { property: 'music', label: 'score',template: 'BackBundle:Default:music.html.twig',  type_options: { required: false },help: 'optional field' }
+                   - { property: 'releaseDate', type:'birthday' }
+                   - { property: 'runningTime', type:'time' }
+                   - { property: 'country', type:'country' }
+                   - { property: 'language', type:'language' }
+                   - { property: 'companies', type_options: { by_reference: false} }
+                  
+                   
+            edit:
+                title: 'Edit Movie'
+                form_options: { validation_groups: ['Default'] }
+                fields:  
+                   - enTitle
+                   - frTitle
+                   - { property: 'companies', type_options: { by_reference: false} }
+                   - plot
+                   - screenplay
+                   - { property: 'music', label: 'score', type_options: { required: false },help: 'optional field' }
+                   - { property: 'releaseDate', type:'birthday'}
+                   - { property: 'runningTime', type:'time' }
+                   - { property: 'country', type:'country' }
+                   - { property: 'language', type:'language' }
+                   
+            #templates:
+                #paginator: 'BackBundle:Default:paginator.html.twig'
+
+        Cast:
+            class: BackBundle\Entity\Cast
+            search:
+                title: 'Search Cast'
+            show:
+                title: 'Show Cast'
+                fields: 
+                    - id
+                    - firstName
+                    - lastName
+                    - { property: 'image', type: 'image', base_path: '%app.path.cast_images%' }
+                    - { property: 'birthDate', format:'j/n/Y'}
+                    #- { property: 'picture', type: 'image', base_path: 'PIC/cast/'}
+                    - carreer
+                    - alt
+                    
+            list:
+                title: 'Cast List'
+                fields: 
+                    - id
+                    - firstName
+                    - lastName
+                    - { property: 'image', type: 'image', base_path: '%app.path.cast_images%' }
+                    - { property: 'birthDate', format:'j/n/Y'}
+                    - carreer
+                    - alt
+                    
+                    #- { property: 'picture', type: 'image', base_path: 'PIC/cast/'}
+                    
+            new:
+                title: 'Add Cast'
+                form_options: { validation_groups: ['Default', 'Cast'] }
+                fields: 
+                    - firstName
+                    - lastName
+                    - { property: 'birthDate', type:'birthday' , format:'j/n/Y'}
+                    - { property: 'carreer', type:'textarea'}
+                    - { property: 'imageFile', type: 'vich_image' , label:'Picture' }
+                    - alt
+                    
+            edit:
+                title: 'Edit Cast'
+                form_options: { validation_groups: ['Default'] }
+                fields: 
+                    - firstName
+                    - lastName
+                    - { property: 'birthDate', type:'birthday' , format:'j/n/Y'}
+                    - { property: 'carreer', type:'textarea'}
+                    - { property: 'imageFile', type: 'vich_image' }
+                   # - { property: 'picture', type: 'file', base_path: 'PIC/cast/'}
+                    - alt
+                     
+        Gallery:
+            class: BackBundle\Entity\Gallery
+            search:
+                title: 'Search gallery'
+            show:
+                title: 'Show Gallery'
+                fields: 
+                    - id
+                    - { property: 'movie.enTitle', label:'Movie' }
+                    - { property : 'type' }
+                    - { property: 'image', type: 'image', base_path: '%app.path.gallery_images%' }
+                    - { property: 'alt'}
+            list:
+                title: 'Gallery List'
+                fields: 
+                    - id
+                    - { property: 'movie.enTitle', label:'Movie' }
+                    - { property : 'type' }
+                    #- { property: 'path', type: 'image', base_path: 'PIC/gallery/'}
+                    - { property: 'image', type: 'image', base_path: '%app.path.gallery_images%' }
+                    - { property: 'alt'}
+                    
+                     
+            new:
+                title: 'Add Gallery'
+                form_options: { validation_groups: ['Default', 'Gallery'] }
+                fields:  
+                    - { property : 'type' ,type: 'choice', type_options: { choices: { 'poster': 'poster', 'photogram': 'photogram' , 'movie set picture': 'movie set picture' } ,'choices_as_values':true, 'multiple':false, 'expanded': true } }
+                    #- { property: 'path', type: 'file', base_path: 'PIC/gallery/'}
+                    - { property: 'imageFile', type: 'vich_image' , label:'Picture' }
+                    - { property: 'alt', type: 'text'}
+                    - { type: 'divider' }
+                    - { property: 'movie', type: 'easyadmin_autocomplete', type_options: { class: 'BackBundle\Entity\Movie' } }
+            edit:
+                title: 'Edit Gallery'
+                form_options: { validation_groups: ['Default'] }
+                fields:  
+                    - { property : 'type' ,type: 'choice', type_options: { choices: { 'poster': 'poster', 'photogram': 'photogram' , 'movie set picture': 'movie set picture' } ,'choices_as_values':true, 'multiple':false, 'expanded': true } }
+                    #- { property: 'path', type: 'file', base_path: 'PIC/gallery/'}
+                    - { property: 'imageFile', type: 'vich_image'}
+                    - { property: 'alt'}
+                    - { type: 'divider' }
+                    - { property: 'movie', type: 'easyadmin_autocomplete', type_options: { class: 'BackBundle\Entity\Movie' } }
+                
+        Award:
+            class: BackBundle\Entity\Award
+            search:
+                title: 'Search Award'
+            show:
+                title: 'Show Award'
+                fields: 
+                    - id
+                    - price
+                    - { property: 'movie.enTitle', label:'Movie' }
+                    - type
+                    - year
+                actions: 
+                    - { name: 'test', icon: 'sunglasses' }
+            list:
+                title: 'Award List'
+                fields: 
+                    - id
+                    - price
+                    - { property: 'movie.enTitle', label:'Movie' }
+                    - type
+                    - year
+                actions: 
+                    - { name: 'test', icon: 'sunglasses' }
+            new:
+                title: 'Add Award'
+                form_options: { validation_groups: ['Default', 'Award'] }
+                fields: 
+                    - price
+                    - { property : 'type' ,type: 'choice', type_options: { choices: {'won': 'won', 'nominated': 'nominated' } ,'choices_as_values':true, 'multiple':false, 'expanded': true } }
+                    - year
+                    - { type: 'divider' }
+                    - { property: 'movie', type: 'easyadmin_autocomplete', type_options: { class: 'BackBundle\Entity\Movie' } }
+            edit:
+                title: 'Edit Award'
+                form_options: { validation_groups: ['Default'] }
+                fields: 
+                    - price
+                    - { property : 'type' ,type: 'choice', type_options: { choices: {'won': 'won', 'nominated': 'nominated' } ,'choices_as_values':true, 'multiple':false, 'expanded': true } }
+                    - year
+                    - { type: 'divider' }
+                    - { property: 'movie', type: 'easyadmin_autocomplete', type_options: { class: 'BackBundle\Entity\Movie' } }
+                       
+        Company:
+            class: BackBundle\Entity\Company
+            #controller: BackBundle\Admin\CompanyController
+            search:
+                title: 'Search Company'
+            show:
+                title: 'Show Company'
+            list:
+                #actions: 
+                    #- { name: 'test', icon: 'plus-square' }
+                title: 'Company List'
+                fields: ['id','companyName']
+            new:
+                title: 'Add Company'
+                form_options: { validation_groups: ['Default', 'Company'] }
+                fields: 
+                    - { property: 'companyName', label: 'Company' }
+            edit:
+                title: 'Edit Company'
+                form_options: { validation_groups: ['Default'] }
+                fields: 
+                    - { property: 'companyName', label: 'Company' }

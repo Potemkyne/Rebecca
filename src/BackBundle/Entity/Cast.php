@@ -3,15 +3,18 @@
 namespace BackBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Cast
- *
+ * @ORM\Entity
+ * @Vich\Uploadable
  * @ORM\Table(name="cast")
  * @ORM\Entity(repositoryClass="BackBundle\Repository\CastRepository")
  */
-class Cast
-{
+class Cast {
+
     /**
      * @var int
      *
@@ -21,12 +24,18 @@ class Cast
      */
     private $id;
 
-      /**
-     * @ORM\ManyToMany(targetEntity="BackBundle\Entity\Movie",cascade={"persist"})
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @var string
      */
-    private $movies;
+    private $image;
 
-    
+    /**
+     * @Vich\UploadableField(mapping="cast_images", fileNameProperty="image")
+     * @var File
+     */
+    private $imageFile;
+
     /**
      * @var string
      *
@@ -41,7 +50,7 @@ class Cast
      */
     private $lastName;
 
-   /**
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="birthDate", type="date")
@@ -51,16 +60,16 @@ class Cast
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255)
+     * @ORM\Column(name="picture", type="string", length=255)
      */
-    private $gender;
+    //private $picture;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="picture", type="string", length=255)
+     * @ORM\Column(name="alt", type="string", length=255)
      */
-    private $picture;
+    private $alt;
 
     /**
      * @var string
@@ -69,14 +78,12 @@ class Cast
      */
     private $carreer;
 
-
     /**
      * Get id
      *
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -87,8 +94,7 @@ class Cast
      *
      * @return Cast
      */
-    public function setFirstName($firstName)
-    {
+    public function setFirstName($firstName) {
         $this->firstName = $firstName;
 
         return $this;
@@ -99,8 +105,7 @@ class Cast
      *
      * @return string
      */
-    public function getFirstName()
-    {
+    public function getFirstName() {
         return $this->firstName;
     }
 
@@ -111,8 +116,7 @@ class Cast
      *
      * @return Cast
      */
-    public function setLastName($lastName)
-    {
+    public function setLastName($lastName) {
         $this->lastName = $lastName;
 
         return $this;
@@ -123,8 +127,7 @@ class Cast
      *
      * @return string
      */
-    public function getLastName()
-    {
+    public function getLastName() {
         return $this->lastName;
     }
 
@@ -135,8 +138,7 @@ class Cast
      *
      * @return Cast
      */
-    public function setBirthDate($birthDate)
-    {
+    public function setBirthDate($birthDate) {
         $this->birthDate = $birthDate;
 
         return $this;
@@ -147,33 +149,8 @@ class Cast
      *
      * @return string
      */
-    public function getBirthDate()
-    {
+    public function getBirthDate() {
         return $this->birthDate;
-    }
-
-    /**
-     * Set gender
-     *
-     * @param string $gender
-     *
-     * @return Cast
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
-     * Get gender
-     *
-     * @return string
-     */
-    public function getGender()
-    {
-        return $this->gender;
     }
 
     /**
@@ -183,8 +160,7 @@ class Cast
      *
      * @return Cast
      */
-    public function setPicture($picture)
-    {
+    public function setPicture($picture) {
         $this->picture = $picture;
 
         return $this;
@@ -195,8 +171,7 @@ class Cast
      *
      * @return string
      */
-    public function getPicture()
-    {
+    public function getPicture() {
         return $this->picture;
     }
 
@@ -207,8 +182,7 @@ class Cast
      *
      * @return Cast
      */
-    public function setCarreer($carreer)
-    {
+    public function setCarreer($carreer) {
         $this->carreer = $carreer;
 
         return $this;
@@ -219,49 +193,54 @@ class Cast
      *
      * @return string
      */
-    public function getCarreer()
-    {
+    public function getCarreer() {
         return $this->carreer;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->movies = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add movie
+     * Set alt
      *
-     * @param \BackBundle\Entity\Movie $movie
+     * @param string $alt
      *
      * @return Cast
      */
-    public function addMovie(\BackBundle\Entity\Movie $movie)
-    {
-        $this->movies[] = $movie;
+    public function setAlt($alt) {
+        $this->alt = $alt;
 
         return $this;
     }
 
     /**
-     * Remove movie
+     * Get alt
      *
-     * @param \BackBundle\Entity\Movie $movie
+     * @return string
      */
-    public function removeMovie(\BackBundle\Entity\Movie $movie)
-    {
-        $this->movies->removeElement($movie);
+    public function getAlt() {
+        return $this->alt;
     }
 
-    /**
-     * Get movies
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMovies()
-    {
-        return $this->movies;
+    public function setImageFile(File $image = null) {
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
     }
+
+    public function getImageFile() {
+        return $this->imageFile;
+    }
+
+    public function setImage($image) {
+        $this->image = $image;
+    }
+
+    public function getImage() {
+        return $this->image;
+    }
+
 }

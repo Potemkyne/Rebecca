@@ -21,10 +21,10 @@ class Cast
      */
     private $id;
 
-      /**
-     * @ORM\ManyToMany(targetEntity="BackBundle\Entity\Movie",cascade={"persist"}, inversedBy="casts")
+     /**
+     * @ORM\ManyToMany(targetEntity="BackBundle\Entity\Movie",cascade={"persist"})
      */
-    private $movies;
+    //private $movies;
 
     
     /**
@@ -51,16 +51,16 @@ class Cast
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255)
-     */
-    private $gender;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="picture", type="string", length=255)
      */
     private $picture;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alt", type="string", length=255)
+     */
+    private $alt;
 
     /**
      * @var string
@@ -152,29 +152,7 @@ class Cast
         return $this->birthDate;
     }
 
-    /**
-     * Set gender
-     *
-     * @param string $gender
-     *
-     * @return Cast
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
-     * Get gender
-     *
-     * @return string
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
+    
 
     /**
      * Set picture
@@ -263,5 +241,29 @@ class Cast
     public function getMovies()
     {
         return $this->movies;
+    }
+
+    /**
+     * Set alt
+     *
+     * @param string $alt
+     *
+     * @return Cast
+     */
+    public function setAlt($alt)
+    {
+        $this->alt = $alt;
+
+        return $this;
+    }
+
+    /**
+     * Get alt
+     *
+     * @return string
+     */
+    public function getAlt()
+    {
+        return $this->alt;
     }
 }

@@ -3,16 +3,18 @@
 namespace BackBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Gallery
- *
+ * @ORM\Entity
+ * @Vich\Uploadable
  * @ORM\Table(name="gallery")
  * @ORM\Entity(repositoryClass="BackBundle\Repository\GalleryRepository")
  */
-class Gallery
-{
+class Gallery {
+
     /**
      * @var int
      *
@@ -27,7 +29,7 @@ class Gallery
      * @ORM\JoinColumn(nullable=false,onDelete="CASCADE")
      */
     private $movie;
-    
+
     /**
      * @var string
      *
@@ -42,14 +44,37 @@ class Gallery
      */
     private $alt;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @var string
+     */
+    private $image;
+
+    /**
+     * @Vich\UploadableField(mapping="gallery_images", fileNameProperty="image")
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255)
+     */
+    //private $path;
 
     /**
      * Get id
      *
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -60,8 +85,7 @@ class Gallery
      *
      * @return Gallery
      */
-    public function setType($type)
-    {
+    public function setType($type) {
         $this->type = $type;
 
         return $this;
@@ -72,8 +96,7 @@ class Gallery
      *
      * @return string
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->type;
     }
 
@@ -84,8 +107,7 @@ class Gallery
      *
      * @return Gallery
      */
-    public function setAlt($alt)
-    {
+    public function setAlt($alt) {
         $this->alt = $alt;
 
         return $this;
@@ -96,8 +118,7 @@ class Gallery
      *
      * @return string
      */
-    public function getAlt()
-    {
+    public function getAlt() {
         return $this->alt;
     }
 
@@ -108,8 +129,7 @@ class Gallery
      *
      * @return Gallery
      */
-    public function setMovie(\BackBundle\Entity\Movie $movie)
-    {
+    public function setMovie(\BackBundle\Entity\Movie $movie) {
         $this->movie = $movie;
 
         return $this;
@@ -120,36 +140,78 @@ class Gallery
      *
      * @return \BackBundle\Entity\Movie
      */
-    public function getMovie()
-    {
+    public function getMovie() {
         return $this->movie;
     }
-  
-    private $file;
 
-    public function getFile() {
-        return $this->file;
+    /**
+     * Set path
+     *
+     * @param string $path
+     *
+     * @return Gallery
+     */
+    public function setPath($path) {
+        $this->path = $path;
+
+        return $this;
     }
 
-    public function setFile(UploadedFile $file = null) {
-        $this->file = $file;
+    /**
+     * Get path
+     *
+     * @return string
+     */
+    public function getPath() {
+        return $this->path;
     }
 
-    public function upload() {
-        if (null === $this->file) {
-            return;
+    public function setImageFile(File $image = null) {
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
         }
-        $name = $this->file->getClientOriginalName();
-        $this->file->move($this->getUploadRootDir(), $name);
-        $this->url = $name;
-        $this->alt = $name;
     }
 
-    public function getUploadDir() {
-        return 'PIC/gallery';
+    public function getImageFile() {
+        return $this->imageFile;
     }
 
-    public function getUploadRootDir() {
-        return __DIR__ . '../../../../web/' . $this->getUploadDir();
+    public function setImage($image) {
+        $this->image = $image;
+    }
+
+    public function getImage() {
+        return $this->image;
+    }
+
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Gallery
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

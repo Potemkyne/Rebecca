@@ -4,10 +4,13 @@ imports:
     - { resource: services.yml }
     - { resource: "@BackBundle/Resources/config/services.yml" }
     - { resource: "@FrontBundle/Resources/config/services.yml" }
+    - { resource: easyadmin.yml }   
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.path.cast_images: /uploads/images/cast
+    app.path.gallery_images: /uploads/images/gallery
     locale: en
 
 framework:
@@ -70,77 +73,12 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-# app/config/config.yml
-easy_admin:
-    formats:
-        date:     'd/m/Y'
-        time:     'H:i'
-        datetime: 'd/m/Y H:i:s'
-   
-    entities:
-        Movie:
-            class:  BackBundle\Entity\Movie
-            help: 'Global message displayed in all views'
-            label: 'Movies'
-            list:
-                title: "Most recent movies"
-                help: 'The list view overrides the global help message'
-                max_results: 30
-                fields: ['id', 'enTitle','frTitle', 'plot',{ property: 'music', label: 'score' },'releaseDate','runningTime','country',{ property: 'language', css_class: 'text-right' }]
-                #dql_filter: 'entity.runningTime > '
-            show:
-                # 'help' is not defined, so the global help message is displayed
-                # ...
-            search:
-                # use the null value to not display the inherited global help message
-                help: null
-            #templates:
-                #paginator: ''
-
-        Cast:
-            class: BackBundle\Entity\Cast
-            list:
-                fields: ['id','firstName','lastName','birthDate', 'gender',{ property: 'picture', type: 'image', base_path: 'PIC/cast/'}, 'carreer']
-          
-        Company:
-            class: BackBundle\Entity\Company
-        Award:
-            class: BackBundle\Entity\Award
-        Gallery:
-            class: BackBundle\Entity\Gallery
-            list:
-                fields: ['id','type', { property: 'alt', type: 'image', base_path: 'PIC/gallery/'}]
-     
-    site_name: 'REBECCA'   
-    design:
-        menu:  
-            - Movie
-            #- { label: 'Movie', children:['Company'] }
-            - { entity: 'Cast', default:'true'}
-            - Gallery
-            - Award
-            - { entity: 'Company', label: 'Producteur' , icon: 'tag', params:{action:'new'}}
-            - { label: 'Public Homepage', route: 'back_homepage' }
-            
-        brand_color: '#002fa7'
-        color_scheme: 'dark'
-        assets:
-            css:
-                # HTTP protocol-relative URL
-                - '//example.org/css/admin1.css'
-                # absolute non-secure URL
-                - 'http://example.org/css/admin2.css'
-                # absolute secure URL
-                - 'https://example.org/css/admin3.css'
-                # absolute internal bundle URL
-                - '/bundles/user/css/admin4.css'
-                # relative internal bundle URL
-                - 'CSS/mstyles.css'
-            js:
-                # this option works exactly the same as the 'css' option
-                - '//example.org/js/admin1.js'
-                - 'http://example.org/js/admin2.js'
-                - 'https://example.org/js/admin3.js'
-                - '/bundles/user/js/admin4.js'
-                - 'bundles/app/js/admin5.js'
-            favicon: 'ASSETS/backend/hitch.ico'
+vich_uploader:
+    db_driver: orm
+    mappings:
+        cast_images:
+            uri_prefix:         '%app.path.cast_images%'
+            upload_destination: '%kernel.root_dir%/../web/uploads/images/cast'
+        gallery_images:
+            uri_prefix:         '%app.path.gallery_images%'
+            upload_destination: '%kernel.root_dir%/../web/uploads/images/gallery'

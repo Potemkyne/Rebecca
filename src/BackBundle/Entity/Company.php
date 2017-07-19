@@ -22,11 +22,6 @@ class Company
     private $id;
     
     /**
-     * @ORM\ManyToMany(targetEntity="BackBundle\Entity\Movie",cascade={"persist"})
-     */
-    private $movies;
-    
-    /**
      * @var string
      *
      * @ORM\Column(name="companyName", type="string", length=255)
@@ -67,45 +62,9 @@ class Company
     {
         return $this->companyName;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->movies = new \Doctrine\Common\Collections\ArrayCollection();
+    
+    public function __toString(){
+        return $this->getCompanyName();
     }
-
-    /**
-     * Add movie
-     *
-     * @param \BackBundle\Entity\Movie $movie
-     *
-     * @return Company
-     */
-    public function addMovie(\BackBundle\Entity\Movie $movie)
-    {
-        $this->movies[] = $movie;
-
-        return $this;
-    }
-
-    /**
-     * Remove movie
-     *
-     * @param \BackBundle\Entity\Movie $movie
-     */
-    public function removeMovie(\BackBundle\Entity\Movie $movie)
-    {
-        $this->movies->removeElement($movie);
-    }
-
-    /**
-     * Get movies
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMovies()
-    {
-        return $this->movies;
-    }
+    
 }

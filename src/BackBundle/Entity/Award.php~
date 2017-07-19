@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="award")
  * @ORM\Entity(repositoryClass="BackBundle\Repository\AwardRepository")
  */
-class Award
-{
+class Award {
+
     /**
      * @var int
      *
@@ -26,28 +26,34 @@ class Award
      * @ORM\JoinColumn(nullable=false,onDelete="CASCADE")
      */
     private $movie;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="win", type="string", length=255)
+     * @ORM\Column(name="price", type="string", length=255)
      */
-    private $win;
+    private $price;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="year", type="date")
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="year", type="string", length=255)
      */
     private $year;
-
 
     /**
      * Get id
      *
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -58,8 +64,7 @@ class Award
      *
      * @return Award
      */
-    public function setWin($win)
-    {
+    public function setWin($win) {
         $this->win = $win;
 
         return $this;
@@ -70,8 +75,7 @@ class Award
      *
      * @return string
      */
-    public function getWin()
-    {
+    public function getWin() {
         return $this->win;
     }
 
@@ -82,8 +86,7 @@ class Award
      *
      * @return Award
      */
-    public function setYear($year)
-    {
+    public function setYear($year) {
         $this->year = $year;
 
         return $this;
@@ -94,9 +97,78 @@ class Award
      *
      * @return \DateTime
      */
-    public function getYear()
-    {
+    public function getYear() {
         return $this->year;
     }
-}
 
+    /**
+     * Set movie
+     *
+     * @param \BackBundle\Entity\Movie $movie
+     *
+     * @return Award
+     */
+    public function setMovie(\BackBundle\Entity\Movie $movie) {
+        $this->movie = $movie;
+
+        return $this;
+    }
+
+    /**
+     * Get movie
+     *
+     * @return \BackBundle\Entity\Movie
+     */
+    public function getMovie() {
+        return $this->movie;
+    }
+
+
+    /**
+     * Set price
+     *
+     * @param string $price
+     *
+     * @return Award
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Award
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+}

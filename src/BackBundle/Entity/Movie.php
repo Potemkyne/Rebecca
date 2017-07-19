@@ -21,17 +21,16 @@ class Movie
      */
     private $id;
     
+    /**
+     * @ORM\ManyToMany(targetEntity="BackBundle\Entity\Company", cascade={"persist"})
+     */
+    private $companies;
     
     /**
-     * @ORM\ManyToMany(targetEntity="BackBundle\Entity\Cast", cascade={"persist"},mappedBy="movies")
+     * @ORM\ManyToMany(targetEntity="BackBundle\Entity\Cast", cascade={"persist"})
      */
-    /*private $casts;*/
+    private $casts;
     
-    /**
-     * @ORM\ManyToMany(targetEntity="BackBundle\Entity\Company", cascade={"persist"},mappedBy="movies")
-     */
-  /* private $companies;*/
-
     /**
      * @var string
      *
@@ -52,6 +51,13 @@ class Movie
      * @ORM\Column(name="music", type="string", length=255)
      */
     private $music;
+    
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="screenplay", type="string", length=255)
+     */
+    private $screenplay;
     
     /**
      * @var string
@@ -365,4 +371,35 @@ class Movie
     {
         return $this->country;
     }
+
+    /**
+     * Set screenplay
+     *
+     * @param string $screenplay
+     *
+     * @return Movie
+     */
+    public function setScreenplay($screenplay)
+    {
+        $this->screenplay = $screenplay;
+
+        return $this;
+    }
+
+    /**
+     * Get screenplay
+     *
+     * @return string
+     */
+    public function getScreenplay()
+    {
+        return $this->screenplay;
+    }
+    
+    public function __toString(){
+        return $this->getEnTitle();
+    }
+
+     
+   
 }
